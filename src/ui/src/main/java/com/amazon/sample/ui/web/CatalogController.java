@@ -19,6 +19,7 @@
 package com.amazon.sample.ui.web;
 
 import com.amazon.sample.ui.services.catalog.CatalogService;
+import com.amazon.sample.ui.services.reviews.ReviewsService;
 import com.amazon.sample.ui.web.util.RequiresCommonAttributes;
 import java.util.Collections;
 import lombok.extern.slf4j.Slf4j;
@@ -42,9 +43,14 @@ public class CatalogController {
   private static final Integer DEFAULT_SIZE = 6;
 
   private CatalogService catalogService;
+  private ReviewsService reviewsService;
 
-  public CatalogController(@Autowired CatalogService catalogService) {
+  public CatalogController(
+    @Autowired CatalogService catalogService,
+    @Autowired ReviewsService reviewsService
+  ) {
     this.catalogService = catalogService;
+    this.reviewsService = reviewsService;
   }
 
   @GetMapping("")
@@ -73,6 +79,7 @@ public class CatalogController {
     Model model
   ) {
     model.addAttribute("item", catalogService.getProduct(id));
+    model.addAttribute("reviews", reviewsService.getReviews(id));
     model.addAttribute(
       "recommendations",
       catalogService
