@@ -44,19 +44,6 @@ Content-Type: application/json
 GET /health
 ```
 
-## Kubernetes Deployment
-
-Deploy to cluster:
-```bash
-kubectl apply -f k8s-deployment.yaml
-```
-
-The deployment uses:
-- **Namespace**: `reviews`
-- **Init container**: Copies code from ConfigMap and runs `npm install`
-- **Base image**: `node:18-alpine`
-- **Service**: ClusterIP on port 80
-
 ## Review Data Format
 
 Reviews are stored with the following fields:
