@@ -10,8 +10,8 @@
 - **Region**: us-west-2
 
 ## Kubernetes Configuration
-- **Cluster Name**: eks-workshop
-- **Cluster ARN**: arn:aws:eks:us-west-2:377881603156:cluster/eks-workshop
+- **Cluster Name**: eks-mcp-workshop
+- **Cluster ARN**: arn:aws:eks:us-west-2:377881603156:cluster/eks-mcp-workshop
 - **Node**: 1 inf1.xlarge instance with Karpenter management
 
 ## Application Status
@@ -19,6 +19,11 @@
 - **Application Services**: UI, Catalog, Carts, Orders, Checkout, Assets
 - **Databases**: MySQL (catalog/orders), DynamoDB (carts), Redis (checkout), RabbitMQ
 - **Infrastructure**: Karpenter, CoreDNS, AWS VPC CNI, Kube-proxy
+
+## Application Access
+- **Ingress Name**: ui (in ui namespace)
+- **External DNS**: Check ingress with `kubectl -n ui get ingress` to get current ALB address
+- **Expected format**: k8s-ui-ui-XXXXXXXX-YYYYYYYY.us-west-2.elb.amazonaws.com
 
 ## Key Guidelines
 - Always use EKS MCP server tools for Kubernetes operations
