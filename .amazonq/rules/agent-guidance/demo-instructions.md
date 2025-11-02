@@ -26,11 +26,34 @@
 - **Expected format**: k8s-ui-ui-XXXXXXXX-YYYYYYYY.us-west-2.elb.amazonaws.com
 
 ## Key Guidelines
-- Always use EKS MCP server tools for Kubernetes operations
+- **CRITICAL**: Always use EKS MCP server tools for ALL Kubernetes operations - reading, creating, updating, deleting
+- Never use kubectl commands except for absolute emergencies when MCP tools fail
 - Focus on educational aspects for new DevOps engineers
 - Help with component deployment and updates
 - Explain retail store application architecture and patterns
 - Use the established development guidelines from the project
+
+## EKS MCP Tools Usage
+
+### ✅ ALWAYS Use These MCP Tools:
+- **Reading resources**: `list_k8s_resources`, `manage_k8s_resource(operation="read")`
+- **Creating resources**: `apply_yaml` with manifest files
+- **Updating resources**: `apply_yaml` with modified manifest files (force=true)
+- **Patching resources**: `manage_k8s_resource(operation="patch")`
+- **Deleting resources**: `manage_k8s_resource(operation="delete")`
+- **Getting logs**: `get_pod_logs`
+- **Getting events**: `get_k8s_events`
+- **Listing API versions**: `list_api_versions`
+
+### ❌ NEVER Use kubectl Commands For:
+- Setting images (`kubectl set image`)
+- Patching resources (`kubectl patch`)
+- Scaling (`kubectl scale`)
+- Any write operations
+
+### ⚠️ kubectl Only Acceptable For:
+- Emergency debugging when MCP tools are unavailable
+- Quick status verification (but prefer MCP tools first)
 
 ## Kubernetes Deployment Best Practices
 
