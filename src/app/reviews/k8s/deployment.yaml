@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: reviews
+  namespace: reviews
+  labels:
+    app.kubernetes.io/created-by: eks-workshop
+    app.kubernetes.io/type: app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: service
+      app.kubernetes.io/instance: reviews
+      app.kubernetes.io/name: reviews
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/component: service
+        app.kubernetes.io/instance: reviews
+        app.kubernetes.io/name: reviews
+        app.kubernetes.io/created-by: eks-workshop
+    spec:
+      initContainers:
+      - name: npm-install
+        image: node:18-alpine
+        command: ['sh', '-c', 'cp /config/* /app/ && cd /app && npm install']
+        volumeMounts:
+        - name: code
+          mountPath: /config
+        - name: app
+          mountPath: /app
+      containers:
+      - name: reviews
+        image: node:18-alpine
+        command: ['node', '/app/server.js']
+        ports:
+        - containerPort: 80
+          name: http
+          protocol: TCP
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 80
+          initialDelaySeconds: 10
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            memory: 256Mi
+        volumeMounts:
+        - name: app
+          mountPath: /app
+      volumes:
+      - name: code
+        configMap:
+          name: reviews-code
+      - name: app
+        emptyDir: {}
