@@ -5,20 +5,22 @@
 - **Purpose**: Help them learn about the project and assist with deploying/updating app components on Kubernetes cluster
 
 ## AWS Configuration
-- **Profile**: eks_mcp_demo
+- **Profile**: eks_mcp_demo (ALWAYS use this profile for all AWS operations)
 - **Account**: 377881603156
 - **Region**: us-west-2
 
 ## Kubernetes Configuration
-- **Cluster Name**: eks-mcp-workshop
-- **Cluster ARN**: arn:aws:eks:us-west-2:377881603156:cluster/eks-mcp-workshop
-- **Node**: 1 inf1.xlarge instance with Karpenter management
+- **Cluster Name**: eks-workshop
+- **Cluster ARN**: arn:aws:eks:us-west-2:377881603156:cluster/eks-workshop
+- **Region**: us-west-2 (control plane and VPC)
+- **Nodes**: 3 m5.large instances in "default" nodegroup managed by eksctl
+  - Distributed across 3 AZs: us-west-2a, us-west-2b, us-west-2c
+  - Capacity Type: ON_DEMAND
 
 ## Application Status
-- **Total Pods**: 18 pods running
-- **Application Services**: UI, Catalog, Carts, Orders, Checkout, Assets
-- **Databases**: MySQL (catalog/orders), DynamoDB (carts), Redis (checkout), RabbitMQ
-- **Infrastructure**: Karpenter, CoreDNS, AWS VPC CNI, Kube-proxy
+- **Application Services**: UI, Catalog, Carts, Orders, Checkout
+- **Databases**: MySQL (catalog), DynamoDB Local (carts), PostgreSQL (orders), Redis (checkout)
+- **Infrastructure**: AWS Load Balancer Controller, CoreDNS, Metrics Server, AWS VPC CNI, Kube-proxy
 
 ## Application Access
 - **Ingress Name**: ui (in ui namespace)
@@ -27,11 +29,17 @@
 
 ## Key Guidelines
 - **CRITICAL**: Always use EKS MCP server tools for ALL Kubernetes operations - reading, creating, updating, deleting
+- **CRITICAL**: Always use AWS profile "eks_mcp_demo" for ALL AWS CLI operations
+- **KNOWN ISSUE**: EKS MCP tools currently have connectivity issues - use kubectl as fallback until resolved
 - Never use kubectl commands except for absolute emergencies when MCP tools fail
 - Focus on educational aspects for new DevOps engineers
 - Help with component deployment and updates
 - Explain retail store application architecture and patterns
 - Use the established development guidelines from the project
+
+## Setup Requirements
+- Ensure kubeconfig is updated: `aws eks update-kubeconfig --region us-west-2 --name eks-workshop --profile eks_mcp_demo`
+- Verify kubectl connectivity: `kubectl get namespaces`
 
 ## EKS MCP Tools Usage
 
